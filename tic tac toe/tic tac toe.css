@@ -1,0 +1,195 @@
+/*распространяется на все элементы  на странице*/
+*, *::after, *::before {
+	box-sizing: border-box;
+/*ужимает контент до размеров	
+content-box - расширяет контенрт
+эти две опци упрощаеют работу с текстом*/
+}
+
+:root {
+	--cell-size: 100px;
+	--mark-size: calc(var(--cell-size)*0.9);
+}
+
+body{
+/*убирам все отступы	*/
+	margin: 0;
+}
+
+/*создание доски*/
+
+.board {
+	width: 100vw ;
+	height: 100vh;
+	display: grid;
+	justify-content:  center;
+	align-content: center;
+	justify-items: center;
+	align-items: center;
+	grid-template-columns: repeat(3,auto);
+}
+
+/*создание клеток на доске*/
+.cell {
+	width: var(--cell-size);
+	height: var(--cell-size);
+	background-color: white;
+	border: 1px solid black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	cursor: pointer;
+}
+
+/*убираем внешние полосы у доски при помощи дочерних клеток*/
+
+.cell:first-child,
+.cell:nth-child(2),
+.cell:nth-child(3) {
+	border-top: none;
+}
+
+
+.cell:nth-child(3n+1) {
+	border-left: none;
+}
+
+
+
+.cell:nth-child(3n) {
+	border-right: none;
+}
+
+
+.cell:nth-child(7),
+.cell:nth-child(8),
+.cell:nth-child(9) {
+	border-bottom: none;
+}
+
+
+/*.cell.x::before,
+.cell.x::after {
+	background-color: black;
+}*/
+
+
+/*рисование  х*/
+.cell.x::before,
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after {
+	content: '';
+	position: absolute;
+	width: calc(var(--mark-size)*0.1);
+	height: var(--mark-size);
+	background-color: black;
+
+}
+
+/*реализация блеклого х*/
+
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after {
+	background-color: lightseagreen;
+}
+
+
+
+/*если перестанет работать вернуть часть сверху*/
+
+
+/*рисование  х*/
+.cell.x::before,
+.board.x .cell:not(.x):not(.circle):hover::before {
+	transform: rotate(45deg);
+}
+
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::after {
+	transform: rotate(-45deg);
+}
+
+
+/*рисование  0*/
+.cell.circle::before,
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+	content: '';
+	position: absolute;
+	background-color: black;
+	border-radius: 50%;
+
+}
+
+
+/*реализация блеклого 0*/
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+	background-color: lightsteelblue;
+}
+
+
+
+/*рисование  0*/
+.cell.circle::before,
+.board.circle .cell:not(.x):not(.circle):hover::before {
+	width: var(--mark-size);
+	height: var(--mark-size);
+}
+
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+	width: calc(var(--mark-size)*0.8);
+	height: calc(var(--mark-size)*0.8);
+	background: white;
+}
+
+.cell.x,
+.cell.circle {
+	cursor: not-allowed;
+}
+
+
+
+/*кастомихация сообщения при победе
+и добавление обводки у букв при помощи shadow*/
+.winning-message{
+	display: none ;
+	position: fixed;
+/*я хз почему но ни margin ни padding в 1 строку не получилось применить	*/
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(178, 222, 39 , 0.6);
+	justify-content: center;
+	align-items: center;
+	color: black;
+	font-size: 4em;
+	text-shadow: -2px 0 lightgoldenrodyellow, 0 2px lightgoldenrodyellow,
+	 2px 0 lightgoldenrodyellow, 0 -2px lightgoldenrodyellow;
+	flex-direction:  column;
+}
+
+/*кастомизация кнопки restart*/
+.winning-message button{
+	font-size: 1em;
+	background-color: lightgoldenrodyellow;
+	border: 3px solid black;
+	padding: 0.11em 0.25em;
+	cursor: pointer;
+}
+
+/*изменение цвета кнопки при наведении на нее*/
+.winning-message button:hover{
+	background-color: black;
+	color: lightgoldenrodyellow;
+	border-color: lightgoldenrodyellow;;
+}
+
+.winning-message.show{
+	display: flex;
+}
